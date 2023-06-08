@@ -119,13 +119,13 @@ export default function BreadPage() {
           </div>
         </div>
         <div className="mb-4">
-          <h2 className="font-semibold mb-2">Options</h2>
+        <h1 className="block text-gray-700 text-md font-semibold mb-2">Options</h1>
           <div className="mb-2">
             <label className="block mb-1">Hydration: {hydration}%</label>
             <input
               type="range"
-              min={0}
-              max={100}
+              min={40}
+              max={110}
               value={hydration}
               onChange={(e) => setHydration(Number(e.target.value))}
               className="w-full bg-gray-800"
@@ -135,8 +135,8 @@ export default function BreadPage() {
             <label className="block mb-1">Salt Percentage: {saltPercentage}%</label>
             <input
               type="range"
-              min={0.5}
-              max={3}
+              min={1.5}
+              max={2.5}
               step={0.1}
               value={saltPercentage}
               onChange={(e) => setSaltPercentage(Number(e.target.value))}
