@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import "node_modules/flag-icons/css/flag-icons.min.css";
 
 export default function BreadPage() {
+  // Initial values for the bread dough ingredients.
   const initialFlour = 500;
   const initialWater = 350;
   const initialSaltPercentage = 2;
   const initialYeastPercentage = 1.4;
   const initialHydration = 70;
 
+  // States for the bread dough ingredients.
   const [flour, setFlour] = useState(initialFlour);
   const [water, setWater] = useState(initialWater);
   const [salt, setSalt] = useState(flour * (initialSaltPercentage / 100));
@@ -19,20 +21,25 @@ export default function BreadPage() {
   const [yeastPercentage, setYeastPercentage] = useState(initialYeastPercentage);
   const [yeastType, setYeastType] = useState("dry");
 
+  // State for the language.
   const [language, setLanguage] = useState("english");
 
+  // Set the hydration percentage.
   useEffect(() => {
     setWater(flour * (hydration / 100));
   }, [flour, hydration]);
 
+  // Set the salt percentage.
   useEffect(() => {
     setSalt(flour * (saltPercentage / 100));
   }, [flour, saltPercentage]);
 
+  // Set the yeast percentage.
   useEffect(() => {
     setYeast(flour * (yeastPercentage / 100));
   }, [flour, yeastPercentage]);
 
+  // Reset all values to their initial values.
   const handleReset = () => {
     setFlour(initialFlour);
     setWater(initialWater);
@@ -44,6 +51,7 @@ export default function BreadPage() {
     setYeastType("dry");
   };
 
+  // Switch the yeast type and set the yeast amount accordingly.
   const handleYeastTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setYeastType(e.target.value);
     if (e.target.value === "dry") {
@@ -58,17 +66,19 @@ export default function BreadPage() {
     }
   };
 
+  // Switch between languages.
   const handleLanguageSwitch = () => {
     const newLanguage = language === "english" ? "icelandic" : "english";
     setLanguage(newLanguage);
   };
 
+  // Variables for all the text, to be able to flip between languages.
   const titleText = language === "english" ? "Bread Dough Calculator" : "Reiknivél Fyrir Brauðdeig"
   const gramsText = language === "english" ? "grams" : "grömm";
   const flourText = language === "english" ? "Flour" : "Hveiti";
-  const waterText = language === "english" ? "Water" : "Vatn";
+  const waterText = language === "english" ? "Liquid" : "Vökvi";
   const optionsText = language === "english" ? "Options" : "Valmöguleikar";
-  const hydrationLabelText = language === "english" ? "Hydration" : "Vatnshlutfall";
+  const hydrationLabelText = language === "english" ? "Hydration" : "Vökvahlutfall";
   const saltPercentageText = language === "english" ? "Salt Percentage" : "Salthlutfall";
   const yeastPercentageText = language === "english" ? "Yeast Percentage" : "Gerhlutfall";
   const sourdoughPercentageText = language === "english" ? "Sourdough Percentage" : "Súrdeigshlutfall";
