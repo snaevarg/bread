@@ -139,7 +139,9 @@ export default function BreadPage() {
           </div>
         </div>
         <div className="mb-4 input-container">
-          <label className="block text-gray-700 text-sm font-semibold mb-2">{yeastLabelText}</label>
+          <label className="block text-gray-700 text-sm font-semibold mb-2">
+            {yeastType === "sourdough" ? sourdoughText : yeastLabelText}
+          </label>
           <div className="relative w-28">
             <input
               type="number"
@@ -228,13 +230,13 @@ export default function BreadPage() {
           </div>
           <div className="relative w-full">
             <button
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white mt-2 py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className="bg-transparent text-gray-800 mt-2 py-2 px-4 border border-gray-400 rounded shadow"
               onClick={handleReset}
             >
               {resetText}
             </button>
             <button
-              className="bg-transparent hover:bg-gray-100 absolute bottom-0 end-2"
+              className="bg-transparent absolute bottom-0 end-2 rounded-full shadow"
               onClick={handleLanguageSwitch}
             >
               <span className={`fi fis ${language === "english" ? "fi-is" : "fi-gb"} fiCircle`} />
