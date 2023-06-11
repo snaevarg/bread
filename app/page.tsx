@@ -202,28 +202,31 @@ export default function BreadPage() {
             <label className="block mb-1">{yeastTypeText}:</label>
             <label className="block mb-1">
               <input
-                type="checkbox"
+                type="radio"
                 value="dry"
                 checked={yeastType === "dry"}
                 onChange={handleYeastTypeChange}
+                name="yeastType"
               />
               &nbsp;{dryYeastText}
             </label>
             <label className="block mb-1">
               <input
-                type="checkbox"
+                type="radio"
                 value="fresh"
                 checked={yeastType === "fresh"}
                 onChange={handleYeastTypeChange}
+                name="yeastType"
               />
               &nbsp;{freshYeastText}
             </label>
             <label className="block mb-1">
               <input
-                type="checkbox"
+                type="radio"
                 value="sourdough"
                 checked={yeastType === "sourdough"}
                 onChange={handleYeastTypeChange}
+                name="yeastType"
               />
               &nbsp;{sourdoughText}
             </label>
