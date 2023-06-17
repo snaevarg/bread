@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import "node_modules/flag-icons/css/flag-icons.min.css";
 import React from "react";
-import { BsMoonStarsFill, BsFillSunFill } from "react-icons/bs";
-import { useTheme } from "next-themes";
+import { ThemeProvider, useTheme } from "next-themes";
 
 export default function BreadPage() {
   // Initial values for the bread dough ingredients.
@@ -27,10 +26,31 @@ export default function BreadPage() {
   // State for the language.
   const [language, setLanguage] = useState("english");
 
-  // State for dark mode.
-  //const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const light = theme === "light";
+  // State to track component mounting.
+  const [isMounted, setIsMounted] = useState(false);
+
+  // State for the theme.
+  const { theme, setTheme } = useTheme(); 
+
+  useEffect(() => {
+    setTheme("light"); // Set light mode as the default theme
+  }, []); // Run only once when the component mounts
+
+  // Toggle between light and dark mode
+  const toggleDarkMode = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    setIsMounted(true); // Component is mounted
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      // Run only after the component is mounted
+      setTheme("light"); // Set light mode as the default theme
+    }
+  }, [isMounted, setTheme]);
 
   // Set the hydration percentage.
   useEffect(() => {
@@ -80,12 +100,6 @@ export default function BreadPage() {
     setLanguage(newLanguage);
   };
 
-  // Switch between dark mode and light mode.
-  //const handleDarkModeSwitch = () => {
-  //  setDarkMode(!darkMode);
-  //};
-
-
   // Variables for all the text, to be able to flip between languages.
   const titleText = language === "english" ? "Bread Dough Calculator" : "Reiknivél Fyrir Brauðdeig"
   const gramsText = language === "english" ? "grams" : "grömm";
@@ -105,169 +119,171 @@ export default function BreadPage() {
   const resetText = language === "english" ? "Reset" : "Endurræsa";
 
   return (
-    <div className="w-full max-w-lg">
-      <div className="min-w-max shadow-md rounded m-5 p-5">
-        <h1 className="block light:text-gray-700 text-md font-semibold mb-2">{titleText}</h1>
-        <div className="mb-4 input-container">
-          <label className="block light:text-gray-700 text-sm font-semibold mb-2">{flourText}</label>
-          <div className="relative w-28">
-            <input
-              type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={flour.toFixed(0)}
-              onChange={(e) => setFlour(Number(e.target.value))}
-            />
-            <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
-            {gramsText}
-            </span>
-          </div>
-        </div>
-        <div className="mb-4 input-container">
-          <label className="block light:text-gray-700 text-sm font-semibold mb-2">{waterText}</label>
-          <div className="relative w-28">
-            <input
-              type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={water.toFixed(0)}
-              onChange={(e) => setWater(Number(e.target.value))}
-              readOnly
-            />
-            <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
-            {gramsText}
-            </span>
-        </div>
-        </div>
-        <div className="mb-4 input-container">
-          <label className="block light:text-gray-700 text-sm font-semibold mb-2">{saltLabelText}</label>
-          <div className="relative w-28">
-            <input
-              type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={salt.toFixed(0)}
-              onChange={(e) => setSalt(Number(e.target.value))}
-              readOnly
-            />
-            <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
-            {gramsText}
-            </span>
-          </div>
-        </div>
-        <div className="mb-4 input-container">
-          <label className="block light:text-gray-700 text-sm font-semibold mb-2">
-            {yeastType === "sourdough" ? sourdoughText : yeastLabelText}
-          </label>
-          <div className="relative w-28">
-            <input
-              type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={yeast.toFixed(0)}
-              onChange={(e) => setYeast(Number(e.target.value))}
-              readOnly
-            />
-            <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
-            {gramsText}
-            </span>
-          </div>
-        </div>
-        <div className="mb-4">
-        <h1 className="block light:text-gray-700 text-md font-semibold mb-2">{optionsText}</h1>
-          <div className="mb-2">
-            <label className="block mb-1 light:text-gray-700">{hydrationLabelText}: {hydration}%</label>
-            <input
-              type="range"
-              min={40}
-              max={110}
-              value={hydration}
-              onChange={(e) => setHydration(Number(e.target.value))}
-              className="w-full bg-gray-800"
-            />
-          </div>
-          <div className="mb-2">
-            <label className="block mb-1 light:text-gray-700">{saltPercentageText}: {saltPercentage}%</label>
-            <input
-              type="range"
-              min={1.5}
-              max={2.5}
-              step={0.1}
-              value={saltPercentage}
-              onChange={(e) => setSaltPercentage(Number(e.target.value))}
-              className="w-full bg-gray-800"
-            />
-          </div>
-          <div className="mb-2">
-            <label className="block mb-1 light:text-gray-700">
-              {yeastType === "dry"
-                ? `${yeastPercentageText}: ${yeastPercentage}%`
-                : yeastType === "fresh"
-                ? `${yeastPercentageText}: ${yeastPercentage}%`
-                : `${sourdoughPercentageText}: ${yeastPercentage}%`}
-            </label>
-            <input
-              type="range"
-              min={yeastType === "dry" ? 0.3 : yeastType === "fresh" ? 0.7 : 2}
-              max={yeastType === "dry" ? 2.5 : yeastType === "fresh" ? 5 : 50}
-              step={yeastType === "dry" ? 0.1 : yeastType === "fresh" ? 0.1 : 1}
-              value={yeastPercentage}
-              onChange={(e) => setYeastPercentage(Number(e.target.value))}
-              className="w-full bg-gray-800"
-            />
-          </div>
-          <div className="mb-2">
-            <label className="block mb-1 light:text-gray-700">{yeastTypeText}:</label>
-            <label className="block mb-1 light:text-gray-700">
+    <ThemeProvider defaultTheme="light">
+      <div className="w-full max-w-lg">
+        <div className="min-w-max shadow-md rounded m-5 p-5">
+          <h1 className="block light:text-gray-700 text-md font-semibold mb-2">{titleText}</h1>
+          <div className="mb-4 input-container">
+            <label className="block light:text-gray-700 text-sm font-semibold mb-2">{flourText}</label>
+            <div className="relative w-28">
               <input
-                type="radio"
-                value="dry"
-                checked={yeastType === "dry"}
-                onChange={handleYeastTypeChange}
-                name="yeastType"
+                type="number"
+                className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={flour.toFixed(0)}
+                onChange={(e) => setFlour(Number(e.target.value))}
               />
-              &nbsp;{dryYeastText}
-            </label>
-            <label className="block mb-1 light:text-gray-700">
-              <input
-                type="radio"
-                value="fresh"
-                checked={yeastType === "fresh"}
-                onChange={handleYeastTypeChange}
-                name="yeastType"
-              />
-              &nbsp;{freshYeastText}
-            </label>
-            <label className="block mb-1 light:text-gray-700">
-              <input
-                type="radio"
-                value="sourdough"
-                checked={yeastType === "sourdough"}
-                onChange={handleYeastTypeChange}
-                name="yeastType"
-              />
-              &nbsp;{sourdoughText}
-            </label>
+              <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
+              {gramsText}
+              </span>
+            </div>
           </div>
-          <div className="relative w-full">
-            <button
-              className="bg-transparent light:text-gray-700 mt-2 py-2 px-4 border border-gray-400 rounded shadow"
-              onClick={handleReset}
+          <div className="mb-4 input-container">
+            <label className="block light:text-gray-700 text-sm font-semibold mb-2">{waterText}</label>
+            <div className="relative w-28">
+              <input
+                type="number"
+                className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={water.toFixed(0)}
+                onChange={(e) => setWater(Number(e.target.value))}
+                readOnly
+              />
+              <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
+              {gramsText}
+              </span>
+          </div>
+          </div>
+          <div className="mb-4 input-container">
+            <label className="block light:text-gray-700 text-sm font-semibold mb-2">{saltLabelText}</label>
+            <div className="relative w-28">
+              <input
+                type="number"
+                className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={salt.toFixed(0)}
+                onChange={(e) => setSalt(Number(e.target.value))}
+                readOnly
+              />
+              <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
+              {gramsText}
+              </span>
+            </div>
+          </div>
+          <div className="mb-4 input-container">
+            <label className="block light:text-gray-700 text-sm font-semibold mb-2">
+              {yeastType === "sourdough" ? sourdoughText : yeastLabelText}
+            </label>
+            <div className="relative w-28">
+              <input
+                type="number"
+                className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={yeast.toFixed(0)}
+                onChange={(e) => setYeast(Number(e.target.value))}
+                readOnly
+              />
+              <span className="absolute bottom-3 end-2 text-gray-500 text-xs">
+              {gramsText}
+              </span>
+            </div>
+          </div>
+          <div className="mb-4">
+          <h1 className="block light:text-gray-700 text-md font-semibold mb-2">{optionsText}</h1>
+            <div className="mb-2">
+              <label className="block mb-1 light:text-gray-700">{hydrationLabelText}: {hydration}%</label>
+              <input
+                type="range"
+                min={40}
+                max={110}
+                value={hydration}
+                onChange={(e) => setHydration(Number(e.target.value))}
+                className="w-full bg-gray-800"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block mb-1 light:text-gray-700">{saltPercentageText}: {saltPercentage}%</label>
+              <input
+                type="range"
+                min={1.5}
+                max={2.5}
+                step={0.1}
+                value={saltPercentage}
+                onChange={(e) => setSaltPercentage(Number(e.target.value))}
+                className="w-full bg-gray-800"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block mb-1 light:text-gray-700">
+                {yeastType === "dry"
+                  ? `${yeastPercentageText}: ${yeastPercentage}%`
+                  : yeastType === "fresh"
+                  ? `${yeastPercentageText}: ${yeastPercentage}%`
+                  : `${sourdoughPercentageText}: ${yeastPercentage}%`}
+              </label>
+              <input
+                type="range"
+                min={yeastType === "dry" ? 0.3 : yeastType === "fresh" ? 0.7 : 2}
+                max={yeastType === "dry" ? 2.5 : yeastType === "fresh" ? 5 : 50}
+                step={yeastType === "dry" ? 0.1 : yeastType === "fresh" ? 0.1 : 1}
+                value={yeastPercentage}
+                onChange={(e) => setYeastPercentage(Number(e.target.value))}
+                className="w-full bg-gray-800"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block mb-1 light:text-gray-700">{yeastTypeText}:</label>
+              <label className="block mb-1 light:text-gray-700">
+                <input
+                  type="radio"
+                  value="dry"
+                  checked={yeastType === "dry"}
+                  onChange={handleYeastTypeChange}
+                  name="yeastType"
+                />
+                &nbsp;{dryYeastText}
+              </label>
+              <label className="block mb-1 light:text-gray-700">
+                <input
+                  type="radio"
+                  value="fresh"
+                  checked={yeastType === "fresh"}
+                  onChange={handleYeastTypeChange}
+                  name="yeastType"
+                />
+                &nbsp;{freshYeastText}
+              </label>
+              <label className="block mb-1 light:text-gray-700">
+                <input
+                  type="radio"
+                  value="sourdough"
+                  checked={yeastType === "sourdough"}
+                  onChange={handleYeastTypeChange}
+                  name="yeastType"
+                />
+                &nbsp;{sourdoughText}
+              </label>
+            </div>
+            <div className="relative w-full">
+              <button
+                className="bg-transparent light:text-gray-700 mt-2 py-2 px-4 border border-gray-400 rounded shadow"
+                onClick={handleReset}
+              >
+                {resetText}
+              </button>
+              <button
+              className="bg-transparent absolute bottom-0 end-16 rounded-full shadow"
+              onClick={toggleDarkMode}
             >
-              {resetText}
+              {/* Conditionally render the initial content of the button */}
+              {isMounted && (theme === "light" ? <span className="text-3xl">🌙</span> : <span className="text-3xl">☀️</span>)}
             </button>
-            <button className="absolute bottom-0 end-16 dark:bg-gray-900 dark:text-yellow-400 bg-gray-100 text-gray-900 w-10 h-10 rounded-full flex justify-center items-center">
-            {light ? (
-              <BsMoonStarsFill onClick={() => setTheme("dark")} size={27} />
-            ) : (
-              <BsFillSunFill onClick={() => setTheme("light")} size={27} />
-            )}
-          </button>
-            <button
-              className="bg-transparent absolute bottom-0 end-2 rounded-full shadow"
-              onClick={handleLanguageSwitch}
-            >
-              <span className={`fi fis ${language === "english" ? "fi-is" : "fi-gb"} fiCircle`} />
-            </button>
+              <button
+                className="bg-transparent absolute bottom-0 end-2 rounded-full shadow"
+                onClick={handleLanguageSwitch}
+              >
+                <span className={`fi fis ${language === "english" ? "fi-is" : "fi-gb"} fiCircle`} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
