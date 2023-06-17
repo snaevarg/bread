@@ -2,6 +2,9 @@
 'use client'
 import { useState, useEffect } from "react";
 import "node_modules/flag-icons/css/flag-icons.min.css";
+import React from "react";
+import { BsMoonStarsFill, BsFillSunFill } from "react-icons/bs";
+import { useTheme } from "next-themes";
 
 export default function BreadPage() {
   // Initial values for the bread dough ingredients.
@@ -23,6 +26,11 @@ export default function BreadPage() {
 
   // State for the language.
   const [language, setLanguage] = useState("english");
+
+  // State for dark mode.
+  //const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const light = theme === "light";
 
   // Set the hydration percentage.
   useEffect(() => {
@@ -72,6 +80,12 @@ export default function BreadPage() {
     setLanguage(newLanguage);
   };
 
+  // Switch between dark mode and light mode.
+  //const handleDarkModeSwitch = () => {
+  //  setDarkMode(!darkMode);
+  //};
+
+
   // Variables for all the text, to be able to flip between languages.
   const titleText = language === "english" ? "Bread Dough Calculator" : "Reiknivél Fyrir Brauðdeig"
   const gramsText = language === "english" ? "grams" : "grömm";
@@ -92,14 +106,14 @@ export default function BreadPage() {
 
   return (
     <div className="w-full max-w-lg">
-      <div className="min-w-max bg-white shadow-md rounded m-5 p-5">
-        <h1 className="block text-gray-700 text-md font-semibold mb-2">{titleText}</h1>
+      <div className="min-w-max shadow-md rounded m-5 p-5">
+        <h1 className="block light:text-gray-700 text-md font-semibold mb-2">{titleText}</h1>
         <div className="mb-4 input-container">
-          <label className="block text-gray-700 text-sm font-semibold mb-2">{flourText}</label>
+          <label className="block light:text-gray-700 text-sm font-semibold mb-2">{flourText}</label>
           <div className="relative w-28">
             <input
               type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={flour.toFixed(0)}
               onChange={(e) => setFlour(Number(e.target.value))}
             />
@@ -109,11 +123,11 @@ export default function BreadPage() {
           </div>
         </div>
         <div className="mb-4 input-container">
-          <label className="block text-gray-700 text-sm font-semibold mb-2">{waterText}</label>
+          <label className="block light:text-gray-700 text-sm font-semibold mb-2">{waterText}</label>
           <div className="relative w-28">
             <input
               type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={water.toFixed(0)}
               onChange={(e) => setWater(Number(e.target.value))}
               readOnly
@@ -124,11 +138,11 @@ export default function BreadPage() {
         </div>
         </div>
         <div className="mb-4 input-container">
-          <label className="block text-gray-700 text-sm font-semibold mb-2">{saltLabelText}</label>
+          <label className="block light:text-gray-700 text-sm font-semibold mb-2">{saltLabelText}</label>
           <div className="relative w-28">
             <input
               type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={salt.toFixed(0)}
               onChange={(e) => setSalt(Number(e.target.value))}
               readOnly
@@ -139,13 +153,13 @@ export default function BreadPage() {
           </div>
         </div>
         <div className="mb-4 input-container">
-          <label className="block text-gray-700 text-sm font-semibold mb-2">
+          <label className="block light:text-gray-700 text-sm font-semibold mb-2">
             {yeastType === "sourdough" ? sourdoughText : yeastLabelText}
           </label>
           <div className="relative w-28">
             <input
               type="number"
-              className="shadow appearance-none border rounded w-28 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-28 py-2 px-3 light:text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={yeast.toFixed(0)}
               onChange={(e) => setYeast(Number(e.target.value))}
               readOnly
@@ -156,9 +170,9 @@ export default function BreadPage() {
           </div>
         </div>
         <div className="mb-4">
-        <h1 className="block text-gray-700 text-md font-semibold mb-2">{optionsText}</h1>
+        <h1 className="block light:text-gray-700 text-md font-semibold mb-2">{optionsText}</h1>
           <div className="mb-2">
-            <label className="block mb-1">{hydrationLabelText}: {hydration}%</label>
+            <label className="block mb-1 light:text-gray-700">{hydrationLabelText}: {hydration}%</label>
             <input
               type="range"
               min={40}
@@ -169,7 +183,7 @@ export default function BreadPage() {
             />
           </div>
           <div className="mb-2">
-            <label className="block mb-1">{saltPercentageText}: {saltPercentage}%</label>
+            <label className="block mb-1 light:text-gray-700">{saltPercentageText}: {saltPercentage}%</label>
             <input
               type="range"
               min={1.5}
@@ -181,7 +195,7 @@ export default function BreadPage() {
             />
           </div>
           <div className="mb-2">
-            <label className="block mb-1">
+            <label className="block mb-1 light:text-gray-700">
               {yeastType === "dry"
                 ? `${yeastPercentageText}: ${yeastPercentage}%`
                 : yeastType === "fresh"
@@ -199,8 +213,8 @@ export default function BreadPage() {
             />
           </div>
           <div className="mb-2">
-            <label className="block mb-1">{yeastTypeText}:</label>
-            <label className="block mb-1">
+            <label className="block mb-1 light:text-gray-700">{yeastTypeText}:</label>
+            <label className="block mb-1 light:text-gray-700">
               <input
                 type="radio"
                 value="dry"
@@ -210,7 +224,7 @@ export default function BreadPage() {
               />
               &nbsp;{dryYeastText}
             </label>
-            <label className="block mb-1">
+            <label className="block mb-1 light:text-gray-700">
               <input
                 type="radio"
                 value="fresh"
@@ -220,7 +234,7 @@ export default function BreadPage() {
               />
               &nbsp;{freshYeastText}
             </label>
-            <label className="block mb-1">
+            <label className="block mb-1 light:text-gray-700">
               <input
                 type="radio"
                 value="sourdough"
@@ -233,11 +247,18 @@ export default function BreadPage() {
           </div>
           <div className="relative w-full">
             <button
-              className="bg-transparent text-gray-800 mt-2 py-2 px-4 border border-gray-400 rounded shadow"
+              className="bg-transparent light:text-gray-700 mt-2 py-2 px-4 border border-gray-400 rounded shadow"
               onClick={handleReset}
             >
               {resetText}
             </button>
+            <button className="absolute bottom-0 end-16 dark:bg-gray-900 dark:text-yellow-400 bg-gray-100 text-gray-900 w-10 h-10 rounded-full flex justify-center items-center">
+            {light ? (
+              <BsMoonStarsFill onClick={() => setTheme("dark")} size={27} />
+            ) : (
+              <BsFillSunFill onClick={() => setTheme("light")} size={27} />
+            )}
+          </button>
             <button
               className="bg-transparent absolute bottom-0 end-2 rounded-full shadow"
               onClick={handleLanguageSwitch}
